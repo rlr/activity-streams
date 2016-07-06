@@ -14,6 +14,8 @@ const am = new ActionManager([
   "RECENT_LINKS_RESPONSE",
   "HIGHLIGHTS_LINKS_REQUEST",
   "HIGHLIGHTS_LINKS_RESPONSE",
+  "REMOTE_TABS_LINKS_REQUEST",
+  "REMOTE_TABS_LINKS_RESPONSE",
   "EXPERIMENTS_REQUEST",
   "EXPERIMENTS_RESPONSE",
   "NOTIFY_BLOCK_URL",
@@ -48,6 +50,7 @@ am.ACTIONS_WITH_SITES = new Set([
   "RECENT_BOOKMARKS_RESPONSE",
   "RECENT_LINKS_RESPONSE",
   "HIGHLIGHTS_LINKS_RESPONSE",
+  "REMOTE_TABS_LINKS_RESPONSE",
 ].map(type => am.type(type)));
 
 function Notify(type, data) {
@@ -119,6 +122,10 @@ function RequestMoreRecentLinks(beforeDate) {
 
 function RequestHighlightsLinks() {
   return RequestExpect("HIGHLIGHTS_LINKS_REQUEST", "HIGHLIGHTS_LINKS_RESPONSE");
+}
+
+function RequestRemoteTabsLinks() {
+  return RequestExpect("REMOTE_TABS_LINKS_REQUEST", "REMOTE_TABS_LINKS_RESPONSE");
 }
 
 function RequestSearchState() {
@@ -220,6 +227,7 @@ am.defineActions({
   RequestRecentLinks,
   RequestMoreRecentLinks,
   RequestHighlightsLinks,
+  RequestRemoteTabsLinks,
   RequestSearchState,
   RequestSearchStrings,
   RequestSearchSuggestions,

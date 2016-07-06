@@ -11,6 +11,8 @@ const Base = React.createClass({
 
     this.props.dispatch(actions.RequestHighlightsLinks());
 
+    this.props.dispatch(actions.RequestRemoteTabsLinks());
+
     this.props.dispatch(actions.RequestBookmarks());
 
     this.props.dispatch(actions.RequestSearchState());

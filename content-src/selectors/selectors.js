@@ -94,9 +94,10 @@ module.exports.selectNewTabSites = createSelector(
   [
     selectTopSites,
     state => state.History,
-    selectSpotlight
+    selectSpotlight,
+    state => state.RemoteTabs,
   ],
-  (TopSites, History, Spotlight) => {
+  (TopSites, History, Spotlight, RemoteTabs) => {
 
     // Remove duplicates
     // Note that we have to limit the length of topsites, spotlight so we
@@ -112,7 +113,7 @@ module.exports.selectNewTabSites = createSelector(
       TopSites: Object.assign({}, TopSites, {rows: topSitesRows}),
       Spotlight: Object.assign({}, Spotlight, {rows: spotlightRows}),
       TopActivity: Object.assign({}, History, {rows: historyRows}),
-      isReady: TopSites.init && History.init && Spotlight.init
+      isReady: TopSites.init && History.init && Spotlight.init && RemoteTabs.init
     };
   }
 );

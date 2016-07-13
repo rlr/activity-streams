@@ -40,7 +40,7 @@ function isValidSpotlightSite(site) {
 
 const selectSpotlight = module.exports.selectSpotlight = createSelector(
   [
-    state => state.Highlights
+    state => state.RemoteTabs
   ],
   (Highlights) => {
     const rows = Highlights.rows

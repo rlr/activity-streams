@@ -32,6 +32,8 @@ const SpotlightItem = React.createClass({
     let contextMessage;
     if (site.context_message) {
       contextMessage = site.context_message;
+    } else if (site.deviceName) {
+      contextMessage = `From ${site.deviceName}`;
     } else if (site.bookmarkDateCreated) {
       contextMessage = `Bookmarked ${moment(site.bookmarkDateCreated).fromNow()}`;
     } else if (site.lastVisitDate) {
@@ -61,7 +63,9 @@ const SpotlightItem = React.createClass({
               <h4 ref="title" className="spotlight-title">{site.title}</h4>
               <p className="spotlight-description" ref="description">{description}</p>
             </div>
-            <div className="spotlight-context" ref="contextMessage">{contextMessage}</div>
+            <div className={classNames("spotlight-context", {sync: !!site.deviceName})} ref="contextMessage">
+              {contextMessage}
+            </div>
           </div>
         </div>
         <div className="inner-border" />

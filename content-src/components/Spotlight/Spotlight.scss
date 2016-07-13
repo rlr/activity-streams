@@ -89,6 +89,12 @@
     color: $light-grey;
     font-size: 11px;
     overflow: hidden;
+
+    &.sync {
+      background: url('img/glyph-sync-16.svg') no-repeat 12px center;
+      background-size: 11px;
+      padding-left: 27px;
+    }
   }
 
   &.spotlight-placeholder {

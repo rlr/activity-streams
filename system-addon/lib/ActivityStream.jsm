@@ -134,6 +134,10 @@ const PREFS_CONFIG = new Map([
   ["tippyTop.service.endpoint", {
     title: "Tippy Top service manifest url",
     value: "https://activity-stream-icons.services.mozilla.com/v1/icons.json.br"
+  }],
+  ["enableWideLayout", {
+    title: "Enable the wider layout (8 topsites per row and larger pocket+highlight cards)",
+    value: true
   }]
 ]);
 

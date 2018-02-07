@@ -49,25 +49,13 @@
   }
 
   // Six columns
-  @media (min-width: $break-point-large) and (max-width: $break-point-widest) {
+  @media (min-width: $break-point-large) and (max-width: $break-point-large + 2 * $card-width) {
     :nth-child(6n) {
       @include context-menu-open-left;
     }
   }
   @media (min-width: $break-point-large) and (max-width: $break-point-large + $card-width) {
     :nth-child(6n+5) {
-      @include context-menu-open-left;
-    }
-  }
-
-  // Eight columns
-  @media (min-width: $break-point-widest) and (max-width: $break-point-widest + 2 * $card-width) {
-    :nth-child(8n) {
-      @include context-menu-open-left;
-    }
-  }
-  @media (min-width: $break-point-widest) and (max-width: $break-point-widest + $card-width) {
-    :nth-child(8n+7) {
       @include context-menu-open-left;
     }
   }
@@ -230,10 +218,36 @@
       @include context-menu-button-hover;
     }
   }
+}
 
-  @media not all and (min-width: $break-point-widest) {
+// Always hide .hide-for-narrow if wide layout is disabled
+.wide-layout-disabled {
+  .top-sites-list {
     .hide-for-narrow {
       display: none;
+    }
+  }
+}
+
+.wide-layout-enabled {
+  .top-sites-list {
+    // Eight columns
+    @media (min-width: $break-point-widest) and (max-width: $break-point-widest + 2 * $card-width) {
+      :nth-child(8n) {
+        @include context-menu-open-left;
+      }
+    }
+
+    @media (min-width: $break-point-widest) and (max-width: $break-point-widest + $card-width) {
+      :nth-child(8n+7) {
+        @include context-menu-open-left;
+      }
+    }
+
+    @media not all and (min-width: $break-point-widest) {
+      .hide-for-narrow {
+        display: none;
+      }
     }
   }
 }

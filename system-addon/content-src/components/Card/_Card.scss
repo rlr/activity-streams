@@ -168,16 +168,20 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+}
 
-  @media (min-width: $break-point-widest) {
-    height: $card-height-large;
+.wide-layout-enabled {
+  .card-outer {
+    @media (min-width: $break-point-widest) {
+      height: $card-height-large;
 
-    .card-preview-image-outer {
-      height: $card-preview-image-height-large;
-    }
+      .card-preview-image-outer {
+        height: $card-preview-image-height-large;
+      }
 
-    .card-text {
-      max-height: 7 * $card-text-line-height + $card-title-margin;
+      .card-text {
+        max-height: 7 * $card-text-line-height + $card-title-margin;
+      }
     }
   }
 }

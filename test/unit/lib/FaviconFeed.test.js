@@ -124,7 +124,7 @@ describe("FaviconFeed", () => {
       const get = () => Promise.resolve([]);
       feed._tippyTop = {get};
       const site = await feed.getSite("example.com");
-      assert.isNull(site);
+      assert.isUndefined(site);
     });
     it("should lazy init _tippyTop", async () => {
       assert.isUndefined(feed._tippyTop);

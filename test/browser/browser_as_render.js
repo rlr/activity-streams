@@ -1,8 +1,11 @@
 "use strict";
 
 test_newtab({
-  async before({pushPrefs}) {
+  async before({pushPrefs, tab}) {
     await pushPrefs(["browser.newtabpage.activity-stream.improvesearch.handoffToAwesomebar", false]);
+    await BrowserTestUtils.waitForCondition(() => ContentTask.spawn(tab.linkedBrowser, {},
+      () => content.document.getElementById("newtab-search-text")),
+      "Should render search box");
   },
   test: function test_render_search() {
     let search = content.document.getElementById("newtab-search-text");
@@ -12,8 +15,11 @@ test_newtab({
 });
 
 test_newtab({
-  async before({pushPrefs}) {
+  async before({pushPrefs, tab}) {
     await pushPrefs(["browser.newtabpage.activity-stream.improvesearch.handoffToAwesomebar", true]);
+    await BrowserTestUtils.waitForCondition(() => ContentTask.spawn(tab.linkedBrowser, {},
+      () => content.document.querySelector(".search-handoff-button")),
+      "Should render search handoff button");
   },
   test: function test_render_search_handoff() {
     let search = content.document.querySelector(".search-handoff-button");
@@ -27,8 +33,11 @@ test_newtab(function test_render_topsites() {
 });
 
 test_newtab({
-  async before({pushPrefs}) {
+  async before({pushPrefs, tab}) {
     await pushPrefs(["browser.newtabpage.activity-stream.feeds.topsites", false]);
+    await BrowserTestUtils.waitForCondition(() => ContentTask.spawn(tab.linkedBrowser, {},
+      () => !content.document.querySelector(".top-sites-list")),
+      "Should not render top sites section");
   },
   test: function test_render_no_topsites() {
     let topSites = content.document.querySelector(".top-sites-list");

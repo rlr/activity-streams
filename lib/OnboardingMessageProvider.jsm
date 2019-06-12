@@ -442,6 +442,16 @@ const ONBOARDING_MESSAGES = async () => ([
     targeting: "attributionData.campaign == 'non-fx-button' && attributionData.source == 'addons.mozilla.org'",
     trigger: {id: "firstRun"},
   },
+  {
+    id: "WHATS_NEW_1",
+    template: "toolbar_panel",
+    content: {
+      title: "What's new in 70",
+    },
+    targeting: `firefoxVersion > 68 && (firstImpression[.id == 'WHATS_NEW_1']|length == 0 ||
+      (firstImpression[.id == 'WHATS_NEW_1']|length == 1 &&
+      currentDate|date - firstImpression[.id == 'WHATS_NEW_1']|mapToProperty('timestamp')[0] <= 4 * 24 * 3600 * 1000))`,
+  },
 ]);
 
 const OnboardingMessageProvider = {

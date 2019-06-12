@@ -15,6 +15,7 @@ XPCOMUtils.defineLazyModuleGetters(this, {
   BookmarkPanelHub: "resource://activity-stream/lib/BookmarkPanelHub.jsm",
   SnippetsTestMessageProvider: "resource://activity-stream/lib/SnippetsTestMessageProvider.jsm",
   PanelTestProvider: "resource://activity-stream/lib/PanelTestProvider.jsm",
+  ToolbarPanelHub: "resource://activity-stream/lib/ToolbarPanelHub.jsm",
 });
 const {ASRouterActions: ra, actionTypes: at, actionCreators: ac} = ChromeUtils.import("resource://activity-stream/common/Actions.jsm");
 const {CFRMessageProvider} = ChromeUtils.import("resource://activity-stream/lib/CFRMessageProvider.jsm");
@@ -395,6 +396,7 @@ class _ASRouter {
       trailheadInitialized: false,
       trailheadInterrupt: "",
       trailheadTriplet: "",
+      firstImpression: [],
       messages: [],
       errors: [],
     };
@@ -589,18 +591,27 @@ class _ASRouter {
     ASRouterPreferences.init();
     ASRouterPreferences.addListener(this.onPrefChange);
     BookmarkPanelHub.init(this.handleMessageRequest, this.addImpression, this.dispatch);
+    ToolbarPanelHub.init();
 
     this._loadLocalProviders();
 
     // We need to check whether to set up telemetry for trailhead
     await this.setupTrailhead();
 
+    const firstImpression = await this._storage.get("firstImpression") || [];
     const messageBlockList = await this._storage.get("messageBlockList") || [];
     const providerBlockList = await this._storage.get("providerBlockList") || [];
     const messageImpressions = await this._storage.get("messageImpressions") || {};
     const providerImpressions = await this._storage.get("providerImpressions") || {};
     const previousSessionEnd = await this._storage.get("previousSessionEnd") || 0;
-    await this.setState({messageBlockList, providerBlockList, messageImpressions, providerImpressions, previousSessionEnd});
+    await this.setState({
+      firstImpression,
+      messageBlockList,
+      providerBlockList,
+      messageImpressions,
+      providerImpressions,
+      previousSessionEnd,
+    });
     this._updateMessageProviders();
     await this.loadMessagesFromAllProviders();
     await MessageLoaderUtils.cleanupCache(this.state.providers, storage);
@@ -623,6 +634,7 @@ class _ASRouter {
     ASRouterPreferences.removeListener(this.onPrefChange);
     ASRouterPreferences.uninit();
     BookmarkPanelHub.uninit();
+    ToolbarPanelHub.uninit();
 
     // Uninitialise all trigger listeners
     for (const listener of ASRouterTriggerListeners.values()) {
@@ -805,9 +817,17 @@ class _ASRouter {
 
   // Return an object containing targeting parameters used to select messages
   _getMessagesContext() {
-    const {previousSessionEnd, trailheadInterrupt, trailheadTriplet} = this.state;
+    const {
+      firstImpression,
+      previousSessionEnd,
+      trailheadInterrupt,
+      trailheadTriplet,
+    } = this.state;
 
     return {
+      get firstImpression() {
+        return firstImpression;
+      },
       get previousSessionEnd() {
         return previousSessionEnd;
       },
@@ -974,6 +994,21 @@ class _ASRouter {
   }
 
   /**
+   * timestamp for first time the message triggered a notification
+   */
+  async addFirstImpression({id}) {
+    const timestamp = Date.now();
+    const existingImpression = this.state.firstImpression.find(msg => msg.id === id);
+    if (!existingImpression) {
+      await this.setState(state => {
+        const firstImpression = [...state.firstImpression, {id, timestamp}];
+        this._storage.set("firstImpression", firstImpression);
+        return {firstImpression};
+      });
+    }
+  }
+
+  /**
    * Route messages based on template to the correct module that can display them
    */
   routeMessageToTarget(message, target, trigger, force = false) {
@@ -989,6 +1024,14 @@ class _ASRouter {
         if (force) {
           BookmarkPanelHub._forceShowMessage(target, message);
         }
+        break;
+      case "toolbar_panel":
+        // Enable the toolbar notification
+        ToolbarPanelHub.showToolbarNotification(target.browser.ownerDocument,
+          this._getUnblockedMessages().filter(({template}) => template === "toolbar_panel"),
+          {force});
+        // Record if this is the first message impression
+        this.addFirstImpression(message);
         break;
       default:
         target.sendAsyncMessage(OUTGOING_MESSAGE_NAME, {type: "SET_MESSAGE", data: message});

@@ -31,6 +31,7 @@ class _ToolbarPanelHub {
       let toolbarbutton = document.getElementById("whats-new-menu-button");
       toolbarbutton.setAttribute("badged", true);
       toolbarbutton.querySelector(".toolbarbutton-badge").setAttribute("value", allUnblockedMessages.length);
+      toolbarbutton.removeAttribute("hidden");
 
       this.state.notification = toolbarbutton;
       this.state.messages = allUnblockedMessages;

@@ -443,14 +443,46 @@ const ONBOARDING_MESSAGES = async () => ([
     trigger: {id: "firstRun"},
   },
   {
-    id: "WHATS_NEW_1",
+    id: "WHATS_NEW_70_1",
     template: "toolbar_panel",
     content: {
-      title: "What's new in 70",
+      published_date: 1560969794394,
+      title: "Protection Is Our Focus",
+      body: "The New Enhanced Tracking Protection, gives you the best level of protection and performance. Discover how this version is the safest version of firefox ever made.",
+      link_text: "Learn more on our blog",
+      link_url: "https://blog.mozilla.org/",
     },
-    targeting: `firefoxVersion > 68 && (firstImpression[.id == 'WHATS_NEW_1']|length == 0 ||
-      (firstImpression[.id == 'WHATS_NEW_1']|length == 1 &&
-      currentDate|date - firstImpression[.id == 'WHATS_NEW_1']|mapToProperty('timestamp')[0] <= 4 * 24 * 3600 * 1000))`,
+    targeting: `firefoxVersion > 68 && (firstImpression[.id == 'WHATS_NEW_70_1']|length == 0 ||
+      (firstImpression[.id == 'WHATS_NEW_70_1']|length == 1 &&
+      currentDate|date - firstImpression[.id == 'WHATS_NEW_70_1']|mapToProperty('timestamp')[0] <= 4 * 24 * 3600 * 1000))`,
+  },
+  {
+    id: "WHATS_NEW_70_2",
+    template: "toolbar_panel",
+    content: {
+      published_date: 1560969794394,
+      title: "Another thing new in Firefox 70",
+      body: "Lorem Ipsum Dolor Sit Amet bla bla bla Lorem Ipsum Dolor Sit Amet bla bla bla",
+      link_text: "Learn more on our blog",
+      link_url: "https://blog.mozilla.org/",
+    },
+    targeting: `firefoxVersion > 68 && (firstImpression[.id == 'WHATS_NEW_70_2']|length == 0 ||
+      (firstImpression[.id == 'WHATS_NEW_70_2']|length == 1 &&
+      currentDate|date - firstImpression[.id == 'WHATS_NEW_70_2']|mapToProperty('timestamp')[0] <= 4 * 24 * 3600 * 1000))`,
+  },
+  {
+    id: "WHATS_NEW_69_1",
+    template: "toolbar_panel",
+    content: {
+      published_date: 1557346235089,
+      title: "Something new in Firefox 69",
+      body: "Lorem Ipsum Dolor Sit Amet bla bla bla Lorem Ipsum Dolor Sit Amet bla bla bla",
+      link_text: "Learn more on our blog",
+      link_url: "https://blog.mozilla.org/",
+    },
+    targeting: `firefoxVersion > 68 && (firstImpression[.id == 'WHATS_NEW_69_1']|length == 0 ||
+      (firstImpression[.id == 'WHATS_NEW_69_1']|length == 1 &&
+      currentDate|date - firstImpression[.id == 'WHATS_NEW_69_1']|mapToProperty('timestamp')[0] <= 4 * 24 * 3600 * 1000))`,
   },
 ]);
 

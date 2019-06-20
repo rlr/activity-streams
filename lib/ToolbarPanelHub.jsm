@@ -3,8 +3,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 "use strict";
 
-// ChromeUtils.defineModuleGetter(this, "Services",
-  // "resource://gre/modules/Services.jsm");
+ChromeUtils.defineModuleGetter(this, "Services",
+  "resource://gre/modules/Services.jsm");
 const {console} = ChromeUtils.import("resource://gre/modules/Console.jsm");
 
 class _ToolbarPanelHub {
@@ -42,7 +42,7 @@ class _ToolbarPanelHub {
     </html:div>
   </html:div>
   */
-  renderMessages(doc, containerId) {
+  renderMessages(win, doc, panelView, containerId) {
     console.log(this.state.messages);
     const container = doc.getElementById(containerId);
     const createElement = elem => doc.createElementNS("http://www.w3.org/1999/xhtml", elem);
@@ -73,7 +73,17 @@ class _ToolbarPanelHub {
         bodyEl.textContent = content.body;
 
         const linkEl = createElement("button");
+        linkEl.classList.add("text-link");
         linkEl.textContent = content.link_text;
+        linkEl.addEventListener("click", async e => {
+          win.ownerGlobal.openLinkIn(content.link_url, "tabshifted", {
+            private: false,
+            triggeringPrincipal: Services.scriptSecurityManager.createNullPrincipal({}),
+            csp: null,
+          });
+
+          // TODO: TELEMETRY
+        });
 
         messageEl.appendChild(dateEl);
         messageEl.appendChild(wrapperEl);
@@ -85,6 +95,8 @@ class _ToolbarPanelHub {
     } else {
       console.log("Messages already rendered.");
     }
+
+    // TODO: TELEMETRY
   }
 
   showToolbarNotification(document, allUnblockedMessages, options) {

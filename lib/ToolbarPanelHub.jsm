@@ -55,6 +55,13 @@ class _ToolbarPanelHub {
         messageEl.classList.add("whatsNew-message");
         if (first) {
           messageEl.classList.add("hero");
+          messageEl.addEventListener("click", () => {
+            win.ownerGlobal.openLinkIn(content.link_url, "tabshifted", {
+              private: false,
+              triggeringPrincipal: Services.scriptSecurityManager.createNullPrincipal({}),
+              csp: null,
+            });
+          });
           first = false;
         }
 
@@ -75,7 +82,7 @@ class _ToolbarPanelHub {
         const linkEl = createElement("button");
         linkEl.classList.add("text-link");
         linkEl.textContent = content.link_text;
-        linkEl.addEventListener("click", async e => {
+        linkEl.addEventListener("click", () => {
           win.ownerGlobal.openLinkIn(content.link_url, "tabshifted", {
             private: false,
             triggeringPrincipal: Services.scriptSecurityManager.createNullPrincipal({}),
@@ -103,7 +110,7 @@ class _ToolbarPanelHub {
     if (!this.state.notification) {
       let toolbarbutton = document.getElementById("whats-new-menu-button");
       toolbarbutton.setAttribute("badged", true);
-      toolbarbutton.querySelector(".toolbarbutton-badge").setAttribute("value", allUnblockedMessages.length);
+      toolbarbutton.querySelector(".toolbarbutton-badge").setAttribute("value", ".");
       toolbarbutton.removeAttribute("hidden");
 
       this.state.notification = toolbarbutton;
